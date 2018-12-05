@@ -26,10 +26,10 @@ class NewsLogger:
 
             for a in soup.find_all('span', attrs={'class': 'subtitle'}):
                 text = a.text.strip()
-                self.logger.info(text)
+                self.logger.info('main - ' + text)
             for a in soup.find_all('div', attrs={'class': 'str3s_txt'}):
                 text = [b for b in a.children][0].text.strip()
-                self.logger.info(text)
+                self.logger.info('Secondary - '.format() + text)
 
     def log_in_interval(self, sleep_time):
         # Using sleep_time < 60 might be considered as an attack
