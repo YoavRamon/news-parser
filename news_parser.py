@@ -30,6 +30,18 @@ class NewsLogger:
             for a in soup.find_all('div', attrs={'class': 'str3s_txt'}):
                 text = [b for b in a.children][0].text.strip()
                 self.logger.info('Secondary - '.format() + text)
+        elif self.mode == 'haaretz':
+            html = request.urlopen('https://www.haaretz.co.il/')
+            soup = BeautifulSoup(html, 'html.parser')
+            for a in soup.find_all('h1', attrs={'class': 't-gamma t-beta--xl h-mb--xxtight--xl'}):
+                text = a.text.strip()
+                self.logger.info('main - ' + text)
+            for a in soup.find_all('h3', attrs={'class': 't-delta h-mb--xxtight'}):
+                text = a.text.strip()
+                self.logger.info('secondary - ' + text)
+            for a in soup.find_all('h3', attrs={'class': 't-epsilon h-mb--xxtight--l'}):
+                text = a.text.strip()
+                self.logger.info('tertiary - ' + text)
 
     def log_in_interval(self, sleep_time):
         # Using sleep_time < 60 might be considered as an attack
@@ -52,6 +64,7 @@ if __name__ == '__main__':
         print('for example:')
         print('* python news_parser.py ynet 100\n')
         print('available parsers:')
-        print('* ynet - www.ynet.co.il\n')
+        print('* ynet - www.ynet.co.il')
+        print('* haaretz - www.haaretz.co.il\n')
         print('Important notes:')
         print('* Please don\'t use logging_interval < 60')
