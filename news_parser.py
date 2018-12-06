@@ -19,29 +19,25 @@ class NewsLogger:
         self.logger.setLevel(logging.DEBUG)
         self.logger.addHandler(fh)
 
+    def _soup_from_url(self, url):
+        html = request.urlopen(url)
+        return BeautifulSoup(html, 'html.parser')
+
+    def _log_title(self, soup, tag, attrs, name):
+        for a in soup.find_all(tag, attrs=attrs):
+            text = a.text.strip()
+            self.logger.info(name + ' - ' + text)
+
     def log_site(self):
         if self.mode == 'ynet':
-            html = request.urlopen('https://www.ynet.co.il/home/0,7340,L-8,00.html')
-            soup = BeautifulSoup(html, 'html.parser')
-
-            for a in soup.find_all('span', attrs={'class': 'subtitle'}):
-                text = a.text.strip()
-                self.logger.info('main - ' + text)
-            for a in soup.find_all('div', attrs={'class': 'str3s_txt'}):
-                text = [b for b in a.children][0].text.strip()
-                self.logger.info('Secondary - '.format() + text)
+            soup = self._soup_from_url('https://www.ynet.co.il/home/0,7340,L-8,00.html')
+            self._log_title(soup, 'span', {'class': 'subtitle'}, 'main')
+            self._log_title(soup, 'div', {'class': 'title', 'style': 'color:#FFFFFF;'}, 'Secondary')
         elif self.mode == 'haaretz':
-            html = request.urlopen('https://www.haaretz.co.il/')
-            soup = BeautifulSoup(html, 'html.parser')
-            for a in soup.find_all('h1', attrs={'class': 't-gamma t-beta--xl h-mb--xxtight--xl'}):
-                text = a.text.strip()
-                self.logger.info('main - ' + text)
-            for a in soup.find_all('h3', attrs={'class': 't-delta h-mb--xxtight'}):
-                text = a.text.strip()
-                self.logger.info('secondary - ' + text)
-            for a in soup.find_all('h3', attrs={'class': 't-epsilon h-mb--xxtight--l'}):
-                text = a.text.strip()
-                self.logger.info('tertiary - ' + text)
+            soup = self._soup_from_url('https://www.haaretz.co.il/')
+            self._log_title(soup, 'h1', {'class': 't-gamma t-beta--xl h-mb--xxtight--xl'}, 'main')
+            self._log_title(soup, 'h3', {'class': 't-delta h-mb--xxtight'}, 'secondary')
+            self._log_title(soup, 'h3', {'class': 't-epsilon h-mb--xxtight--l'}, 'tertiary')
 
     def log_in_interval(self, sleep_time):
         # Using sleep_time < 60 might be considered as an attack
