@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 ## Usage
 for basic usage you can use news_parser.py as an command line tool. 
-for example, if you'll want to scarp the titles of ynet every 60 seconds you could use:
+for example, if you'll want to scrap the titles of ynet every 60 seconds you could use:
 ```
 python news_parser.py ynet 60
 ```
@@ -27,7 +27,7 @@ Note: Please don't use any time that is less than 60 seconds or it might being c
 
 Legal notes
 ---------------------------------------
-This tool is considered a [web scarper](https://en.wikipedia.org/wiki/Web_scraping), 
+This tool is considered a [web scraper](https://en.wikipedia.org/wiki/Web_scraping), 
 please use it in an [ethical](https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01) way 
 AND according to the [Israeli law](http://legalstart.idc.ac.il/he/web-scraping-%D7%91%D7%93%D7%99%D7%9F-%D7%94%D7%99%D7%A9%D7%A8%D7%90%D7%9C%D7%99/)
 
