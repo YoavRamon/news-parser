@@ -21,6 +21,7 @@ Note: Please don't use any time that is less than 60 seconds or it might being c
 
 ### Available modes
 1. ynet - logs [ynet](https://www.ynet.co.il/home/0,7340,L-8,00.html)
+2. walla - logs [וואלה!NEWS](https://www.walla.co.il/)
 2. haaretz - logs [הארץ](https://www.haaretz.co.il/)
 2. kikar - logs [כיכר השבת](https://www.kikar.co.il/)
 

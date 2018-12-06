@@ -46,6 +46,12 @@ class NewsLogger:
             self._log_title(soup, 'div', {'id': 'mainart_special_title'}, 'main')
             soup = soup.find('div', attrs={'class': 'margin_20 kidumim'})
             self._log_title(soup, 'a', {'class': 'news2_header'}, 'secondary', include_children=False)
+        elif self.mode == 'walla':
+            soup = self._soup_from_url('https://www.walla.co.il/')
+            main_soup = soup.find('article', attrs={'class': 'article fc hp-main-article type-1 editor-selections '})
+            self._log_title(main_soup, 'span', {'class': 'text'}, 'main')
+            secondary_soup = soup.find('section', attrs={'class': 'sequence common-articles editor-selections no-title'})
+            self._log_title(secondary_soup, 'span', {'class': 'text'}, 'secondary')
 
     def log_in_interval(self, sleep_time):
         # Using sleep_time < 60 might be considered as an attack
@@ -69,6 +75,7 @@ if __name__ == '__main__':
         print('* python news_parser.py ynet 100\n')
         print('available parsers:')
         print('* ynet - www.ynet.co.il')
+        print('* walla - www.walla.co.il')
         print('* haaretz - www.haaretz.co.il')
         print('* kikar - www.kikar.co.il\n')
         print('Important notes:')
