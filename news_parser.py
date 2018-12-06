@@ -1,5 +1,5 @@
 from urllib import request
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, element
 import logging
 import time
 import sys
@@ -23,9 +23,12 @@ class NewsLogger:
         html = request.urlopen(url)
         return BeautifulSoup(html, 'html.parser')
 
-    def _log_title(self, soup, tag, attrs, name):
+    def _log_title(self, soup, tag, attrs, name, include_children=True):
         for a in soup.find_all(tag, attrs=attrs):
-            text = a.text.strip()
+            if include_children:
+                text = a.text.strip()
+            else:
+                text = "".join([t for t in a.contents if type(t) == element.NavigableString]).strip()
             self.logger.info(name + ' - ' + text)
 
     def log_site(self):
@@ -38,6 +41,11 @@ class NewsLogger:
             self._log_title(soup, 'h1', {'class': 't-gamma t-beta--xl h-mb--xxtight--xl'}, 'main')
             self._log_title(soup, 'h3', {'class': 't-delta h-mb--xxtight'}, 'secondary')
             self._log_title(soup, 'h3', {'class': 't-epsilon h-mb--xxtight--l'}, 'tertiary')
+        elif self.mode == 'kikar':
+            soup = self._soup_from_url('https://www.kikar.co.il/')
+            self._log_title(soup, 'div', {'id': 'mainart_special_title'}, 'main')
+            soup = soup.find('div', attrs={'class': 'margin_20 kidumim'})
+            self._log_title(soup, 'a', {'class': 'news2_header'}, 'secondary', include_children=False)
 
     def log_in_interval(self, sleep_time):
         # Using sleep_time < 60 might be considered as an attack
@@ -61,6 +69,7 @@ if __name__ == '__main__':
         print('* python news_parser.py ynet 100\n')
         print('available parsers:')
         print('* ynet - www.ynet.co.il')
-        print('* haaretz - www.haaretz.co.il\n')
+        print('* haaretz - www.haaretz.co.il')
+        print('* kikar - www.kikar.co.il\n')
         print('Important notes:')
         print('* Please don\'t use logging_interval < 60')
